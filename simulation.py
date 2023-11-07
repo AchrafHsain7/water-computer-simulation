@@ -1,10 +1,8 @@
 import pygame, sys
 from computer import Computer
+from settings import *
 
 
-WIDTH = 1000
-HEIGHT = 600
-FPS = 60
 
 
 class Simulation:
