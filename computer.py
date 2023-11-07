@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from tube import Tube
 from container import Container
+from gate import Gate
 
 
 
@@ -23,6 +24,8 @@ class Computer:
         container_1 = Container([self.containers], None, tube_1, (300, 50), 150)
         container_2 = Container([self.containers], [tube_1], tube_2, (300, 350), 0)
         container_3 = Container([self.containers], [tube_2], None, (300, 600), 0)
+
+        gate_1 = Gate([self.containers], 'and', (700, 300), None, None, None)
 
         
 
