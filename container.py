@@ -7,12 +7,13 @@ from general_container import GeneralContainer
 
 
 class Container(GeneralContainer):
-    def __init__(self, groups, input_tubes, output_tube, pos, intial_water):
+    def __init__(self, groups, input_tubes, output_tube, pos, intial_water=0, max_capacity=200):
         super().__init__(groups)
         self.input_tubes = input_tubes
         self.output_tube = output_tube
         self.current_capacity = intial_water
         self.pos = pos
+        self.max_capacity = max_capacity
         #graphics
         self.container = pygame.Surface((CONTAINER_WIDTH, CONTAINER_HEIGHT))
         self.container.fill('red')
@@ -27,9 +28,18 @@ class Container(GeneralContainer):
         self.water_rect = self.water.get_rect(bottomleft = (pos[0]-INSIDE_WIDTH/2, pos[1] + INSIDE_HEIGHT/2))
 
 
+        #initializing tubes pos
+        self.set_input_tubes()
+        self.set_output_tube()
+
+
     def draw(self):
         screen = pygame.display.get_surface()
         self.update_water_level()
+        if self.current_capacity >= self.max_capacity/2:
+            self.container.fill('green')
+        else:
+            self.container.fill('red')
         screen.blit(self.container, self.rect)
         screen.blit(self.void, self.void_rect)
         screen.blit(self.water, self.water_rect)
@@ -44,6 +54,17 @@ class Container(GeneralContainer):
         if self.input_tubes != None:
             for tube in self.input_tubes:
                 self.current_capacity += tube.get_outflow()
+            if self.current_capacity >= self.max_capacity:
+                self.current_capacity = self.max_capacity
+
+    def set_input_tubes(self):
+        if self.input_tubes != None:
+            for tube in self.input_tubes:
+                tube.set_output_pos(self.pos[0], self.pos[1] - INSIDE_HEIGHT/2)
+
+    def set_output_tube(self):
+        if self.output_tube != None:
+            self.output_tube.set_input_pos(self.pos[0], self.pos[1] + INSIDE_HEIGHT/2)
 
     def update(self):
         self.move_water_to_tube()
