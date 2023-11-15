@@ -11,7 +11,12 @@ class Simulation:
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Water Computer Simulation")
         self.clock = pygame.time.Clock()
-        self.computer = Computer()
+
+        binary1 = '1111'
+        if len(sys.argv) >= 2: binary1 = str(sys.argv[1])
+        binary2 = '1111'
+        if len(sys.argv) >= 3: binary2 = str(sys.argv[2])
+        self.computer = Computer(binary1, binary2)
 
     def run(self):
         pause = False

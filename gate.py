@@ -5,7 +5,7 @@ from general_container import GeneralContainer
 
 
 class Gate(GeneralContainer):
-    def __init__(self, groups, pos, input_tubes, and_tube, xor_tube=None):
+    def __init__(self, groups, pos, input_tubes, and_tube, xor_tube=None, final_container=False, final_pos=0):
         super().__init__(groups)
 
         
@@ -45,6 +45,11 @@ class Gate(GeneralContainer):
         self.water_rect_2 = self.water_2.get_rect(topright = (self.x1, self.y2))
 
 
+        #solution graphics
+        self.is_final_container = final_container
+        self.sol_pos = final_pos
+        self.font = pygame.font.Font(None, 40)
+
         #setting the tubes pos
         self.set_input_tubes()
         self.set_and_tube()
@@ -80,6 +85,14 @@ class Gate(GeneralContainer):
         pygame.draw.line(screen, color, (self.x1, self.y1), (self.x1, self.y2), self.border_width)
         pygame.draw.line(screen, color, (self.x1, self.y2), (self.x2, self.y2), self.border_width)
         pygame.draw.line(screen, color, (self.x2, self.y2), (self.x2, self.y1), self.border_width)
+
+        if self.is_final_container:
+            if self.current_capacity>= self.max_capacity/2:
+                self.value = '1'
+            else:
+                 self.value = '0'
+            value_text = self.font.render(self.value, True, 'white')
+            screen.blit(value_text, self.sol_pos)
         
 
     #receive water from tubes
@@ -88,9 +101,12 @@ class Gate(GeneralContainer):
             self.current_capacity += tube.get_outflow()
         
     def get_status(self):
-        if self.current_capacity >= self.max_capacity*0.9 and self.mode == 'containing':
+        treshold = 0.9
+        if self.xor_tube == None:
+            treshold = 1
+        if self.current_capacity >= self.max_capacity*treshold and self.mode == 'containing':
             self.mode = 'and_outflowing'   
-        if self.current_capacity <= 0 and self.mode == 'and_outflowing':
+        if self.current_capacity <= 0.7 and self.mode == 'and_outflowing':
             self.mode = 'containing'
 
 
@@ -101,7 +117,7 @@ class Gate(GeneralContainer):
 
     def water_xor_outflow(self):
         if self.xor_tube != None:
-            if self.current_capacity >= 0:
+            if self.current_capacity >= 0 and self.mode!='and_outflowing':
                 self.current_capacity -= self.xor_tube.get_inflow()
                 if self.current_capacity <= 0.8 and self.xor_tube.mode == 'water_in' and self.mode == 'and_outflowing':
                     self.xor_tube.set_mode('no_more_inflow')

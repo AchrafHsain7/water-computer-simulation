@@ -7,11 +7,12 @@ from gate import Gate
 
 
 class Computer:
-    def __init__(self):
+    def __init__(self, binary1, binary2):
         self.tubes = pygame.sprite.Group()
         self.containers = pygame.sprite.Group()
 
-        self.create_computer_2('1010', '1101')
+        self.create_computer_2(binary1, binary2)
+
 
 
     def create_computer_1(self):
@@ -65,7 +66,6 @@ class Computer:
                 Container([self.containers], None, tubes_group_1[i], (150 + i*200, 50), 100)
 
         for i, integer in enumerate(number2):
-            print(integer)
             if integer == '0':
                 Container([self.containers], None, tubes_group_2[i], (250 + i*200, 50), 0)
             else:
@@ -79,14 +79,22 @@ class Computer:
         Gate([self.containers], (200, 200), [tube_2, tube_1], tube_18, tube_17)
 
         #second level of gates
-        Container([self.containers], [tube_9], None, (800, 500))
-        Gate([self.containers], (600, 400), [tube_10, tube_11], tube_12, None)
-        Gate([self.containers], (400, 600), [tube_12, tube_13, tube_14], tube_15, None)
-        Gate([self.containers], (200, 700), [tube_15, tube_16, tube_17], tube_19, None)
-        Container([self.containers], [tube_18, tube_19], None, (50, 750))
+        Container([self.containers], [tube_9], None, (800, 500), final_container=True, final_pos=(690, 700))
+        Gate([self.containers], (600, 400), [tube_10, tube_11], tube_12, None, True, (660, 700))
+        Gate([self.containers], (400, 600), [tube_12, tube_13, tube_14], tube_15, None, True, (630, 700))
+        Gate([self.containers], (200, 700), [tube_15, tube_16, tube_17], tube_19, None, True, (600, 700))
+        Container([self.containers], [tube_18, tube_19], None, (50, 750), final_container=True, final_pos=(570, 700))
 
 
+    def create_a_bar(self):
+        tube_1 = Tube([self.containers])
+        tube_2 = Tube([self.containers])
+        tube_3 = Tube([self.containers])
 
+        Container([self.containers], None, tube_1, (250, 250), 00)
+        Container([self.containers], None, tube_2, (500, 250), 100)
+        Gate([self.containers], (375, 500), [tube_1, tube_2], tube_3, None)
+        Container([self.containers], [tube_3], None, (375, 700), 0)
         
 
 

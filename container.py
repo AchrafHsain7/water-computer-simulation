@@ -7,7 +7,7 @@ from general_container import GeneralContainer
 
 
 class Container(GeneralContainer):
-    def __init__(self, groups, input_tubes, output_tube, pos, intial_water=0, max_capacity=200):
+    def __init__(self, groups, input_tubes, output_tube, pos, intial_water=0, max_capacity=200, final_container=False, final_pos=0):
         super().__init__(groups)
         self.input_tubes = input_tubes
         self.output_tube = output_tube
@@ -27,6 +27,12 @@ class Container(GeneralContainer):
         self.water.fill('blue')
         self.water_rect = self.water.get_rect(bottomleft = (pos[0]-INSIDE_WIDTH/2, pos[1] + INSIDE_HEIGHT/2))
 
+        #graphics for solution
+        self.is_final_container = final_container
+        self.sol_pos = final_pos
+        self.font = pygame.font.Font(None, 40)
+
+
 
         #initializing tubes pos
         self.set_input_tubes()
@@ -43,6 +49,14 @@ class Container(GeneralContainer):
         screen.blit(self.container, self.rect)
         screen.blit(self.void, self.void_rect)
         screen.blit(self.water, self.water_rect)
+
+        if self.is_final_container:
+            if self.current_capacity>= self.max_capacity/2:
+                self.value = '1'
+            else:
+                 self.value = '0'
+            value_text = self.font.render(self.value, True, 'white')
+            screen.blit(value_text, self.sol_pos)
 
     def move_water_to_tube(self):
         if self.current_capacity > 0 and self.output_tube != None:

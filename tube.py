@@ -43,7 +43,7 @@ class Tube(pygame.sprite.Sprite):
 
             if self.double_output and self.current_water>=self.water_capacity/2:
                pygame.draw.aaline(screen, 'blue',(middle_x, middle_y), (throw_x, throw_y))
-               #self.current_water -= self.water_outflow/2 - 0.1
+               #self.current_water -= self.water_outflow/2 
 
             pygame.draw.aaline(screen, 'blue', self.input_pos, (output_x, output_y), TUBE_WIDTH-5)
         elif self.mode == 'water_out':
@@ -53,14 +53,16 @@ class Tube(pygame.sprite.Sprite):
                 input_x = self.output_pos[0]
                 input_y = self.output_pos[1]
            pygame.draw.aaline(screen, 'blue',(input_x, input_y), self.output_pos, TUBE_WIDTH-5) 
-           if self.double_output and self.current_water>=self.water_capacity/2:
+           if self.double_output:
                pygame.draw.aaline(screen, 'blue',(middle_x, middle_y), (throw_x, throw_y))
-               self.current_water -= self.water_outflow/2 - 0.1
+               self.current_water -= self.water_outflow/2
+            
 
         elif self.mode == 'stable':
             pygame.draw.aaline(screen, 'blue',self.input_pos, self.output_pos, TUBE_WIDTH-5)
             if self.double_output:
                 pygame.draw.aaline(screen, 'blue',(middle_x, middle_y), (throw_x, throw_y))
+                self.current_water -= self.water_outflow
 
 
 
