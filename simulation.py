@@ -18,6 +18,8 @@ class Simulation:
         if len(sys.argv) >= 3: binary2 = str(sys.argv[2])
         self.computer = Computer(binary1, binary2)
 
+        self.fps = FPS
+
     def run(self):
         pause = False
         while True:
@@ -28,11 +30,15 @@ class Simulation:
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_SPACE:
                         pause = not pause
+                    if event.key == pygame.K_RIGHT:
+                        self.fps = 400
+                    if event.key == pygame.K_LEFT:
+                        self.fps = FPS
             if not pause:
                 self.screen.fill('black')
                 self.computer.run()
                 pygame.display.update()
-                self.clock.tick(FPS)
+                self.clock.tick(self.fps)
 
 if __name__ == '__main__':
     simulation = Simulation()
